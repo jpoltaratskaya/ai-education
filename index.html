@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Обучение ИИ в компании — продающая страница</title>
+  <meta name="description" content="Консалтинг и корпоративное обучение по внедрению AI. Кейс-симуляции, ROI-калькулятор, интерактив и заявка в один клик." />
+  <style>
+    :root{
+      --bg:#0b1020; --panel:#121733; --panel-2:#0f1430; --brand:#7c5cff; --brand-2:#00d1ff;
+      --text:#e7e9ff; --muted:#a9b0d6; --success:#18c964; --warn:#ffd166;
+      --card:#171d3f; --glass:rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      color:var(--text); background:radial-gradient(1200px 1200px at 10% -10%,#1a1f44 0%,#0b1020 55%,#060811 100%);}  
+    a{color:var(--brand-2);text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(11,16,32,.9),rgba(11,16,32,.7));backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .logo{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.3px}
+    .logo i{width:28px;height:28px;border-radius:8px;background:conic-gradient(from 180deg,var(--brand),var(--brand-2),var(--brand));box-shadow:0 0 20px #7c5cff77}
+    .nav a{margin:0 10px;padding:8px 12px;border-radius:10px}
+    .nav a:hover{background:var(--glass)}
+    .btn{background:linear-gradient(90deg,var(--brand),var(--brand-2));border:0;padding:12px 18px;border-radius:14px;color:white;font-weight:700;cursor:pointer;box-shadow:0 7px 18px rgba(124,92,255,.35);transition:.2s;}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(124,92,255,.45)}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.15)}
+
+    /* Hero */
+    .hero{position:relative;overflow:hidden}
+    .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:80px 0}
+    .badge{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.05)}
+    h1{font-size:48px;line-height:1.1;margin:16px 0 8px}
+    .lead{color:var(--muted);font-size:18px}
+    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px}
+
+    /* Sparkles bg */
+    canvas#stars{position:absolute;inset:0;z-index:-1;opacity:.6}
+
+    /* Sections */
+    section{padding:64px 0}
+    h2{font-size:34px;margin:0 0 18px}
+    .muted{color:var(--muted)}
+
+    /* Features grid */
+    .grid{display:grid;gap:18px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-4{grid-template-columns:repeat(4,1fr)}
+    @media (max-width: 980px){.hero .wrap{grid-template-columns:1fr}.grid.cols-3,.grid.cols-4{grid-template-columns:1fr 1fr}}
+    @media (max-width: 620px){.grid.cols-3,.grid.cols-4{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;position:relative;overflow:hidden}
+    .card .tag{position:absolute;top:14px;right:14px;font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#c9d3ff}
+
+    /* Interactive cases */
+    .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+    .chip{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);cursor:pointer}
+    .chip.active{background:linear-gradient(90deg,var(--brand),var(--brand-2));border:0}
+    .case{display:flex;gap:14px;align-items:flex-start}
+    .case svg{flex:0 0 42px}
+    .case h3{margin:0}
+    .case p{margin:6px 0 0;color:var(--muted)}
+
+    /* ROI calc */
+    .calc{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .kpi{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:14px;border-radius:14px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.08)}
+    .kpi .val{font-weight:800;font-size:22px}
+    .range{appearance:none;width:100%;height:8px;border-radius:999px;background:rgba(255,255,255,.12);outline:none}
+    .range::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(90deg,var(--brand),var(--brand-2));box-shadow:0 3px 10px rgba(0,0,0,.35)}
+
+    /* Quiz */
+    .quiz li{display:flex;justify-content:space-between;gap:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,.05);margin:8px 0}
+    .quiz input{accent-color:var(--brand)}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(3,6,15,.75);backdrop-filter:blur(4px);z-index:100}
+    .modal .box{width:min(720px,92vw);background:var(--panel);border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden}
+    .modal header{position:unset;background:transparent;border:0}
+    .modal .content{padding:20px}
+
+    /* CTA */
+    .cta{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
+    .form{display:grid;gap:12px}
+    .input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text);padding:12px 14px;border-radius:12px}
+    .hint{font-size:12px;color:var(--muted)}
+
+    footer{padding:40px 0;border-top:1px solid rgba(255,255,255,.08);color:#b7c1f0}
+    .marquee{overflow:hidden;white-space:nowrap;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:12px}
+    .marquee div{display:inline-block;padding:10px 0;animation:scroll 26s linear infinite}
+    @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* Fun microinteractions */
+    .pulse{position:absolute;inset:auto;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #9f7fff55, transparent 60%);filter:blur(6px)}
+    .shine{position:relative;overflow:hidden}
+    .shine::after{content:"";position:absolute;inset:-100% -20%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);animation:shine 6s infinite}
+    @keyframes shine{50%{transform:translateX(100%)}to{transform:translateX(100%)}}
+  </style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <header>
+    <div class="container nav">
+      <div class="logo"><i></i> Обучение ИИ в компании</div>
+      <nav>
+        <a href="#cases">Кейсы</a>
+        <a href="#calc">ROI</a>
+        <a href="#quiz">Диагностика</a>
+        <a href="#cta" class="btn">Получить программу</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container hero">
+    <div class="wrap">
+      <div>
+        <span class="badge">🤖 Корпоративное обучение • внедрение AI</span>
+        <h1>Повышаем эффективность команды с помощью AI — за 6–8 недель</h1>
+        <p class="lead">Методика «обучение через кейсы»: ваши процессы → симуляции → внедрение. Отбор пилотов, измеримый ROI, сопровождение.
+        </p>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn" id="openDemo">🎯 Подобрать кейсы</button>
+          <button class="btn ghost" onclick="document.querySelector('#calc').scrollIntoView({behavior:'smooth'})">Посчитать выгоду</button>
+        </div>
+        <div class="hero-card" style="margin-top:18px">
+          <strong>Что внутри программы:</strong>
+          <ul>
+            <li>Аудит задач и подбор библиотек/инструментов</li>
+            <li>Гайды по приватности и политике использования</li>
+            <li>Практикум с ИИ-наставником и эталонными промптами</li>
+          </ul>
+          <div class="pulse"></div>
+        </div>
+      </div>
+      <div class="card shine">
+        <span class="tag">Демо‑симулятор</span>
+        <div id="simulator" style="min-height:280px"></div>
+        <div class="hint">Сгенерируйте решение под вашу роль и отрасль</div>
+      </div>
+    </div>
+  </main>
+
+  <section id="cases" class="container">
+    <h2>Интерактивные кейсы применения AI</h2>
+    <p class="muted">Выберите отрасль и функцию — получите готовые сценарии и чек‑лист внедрения.</p>
+
+    <div class="filters" id="filters"></div>
+    <div class="grid cols-3" id="casesGrid"></div>
+    <div class="marquee" style="margin-top:14px"><div>✨ Продажи · 📣 Маркетинг · 🛠️ Операции · 🧑‍💼 HR · 📊 Аналитика · 🧑‍⚖️ Юр.отдел · 🧪 R&D · 🛒 E‑commerce · 🏦 Финансы · 🧑‍💻 IT · </div></div>
+  </section>
+
+  <section id="calc" class="container">
+    <h2>ROI‑калькулятор внедрения</h2>
+    <p class="muted">Подвигайте ползунки и оцените экономию времени и денег на ваших процессах.</p>
+    <div class="calc card">
+      <div>
+        <label>Количество сотрудников в пилоте: <strong id="nPeopleVal">12</strong></label>
+        <input class="range" id="nPeople" type="range" min="3" max="100" value="12">
+
+        <label>Средняя ставка за час (₽): <strong id="rateVal">1800</strong></label>
+        <input class="range" id="rate" type="range" min="500" max="6000" step="100" value="1800">
+
+        <label>Экономия времени на задачу: <strong id="saveVal">35%</strong></label>
+        <input class="range" id="save" type="range" min="5" max="70" step="5" value="35">
+
+        <label>Часов в месяц на повторяющиеся задачи: <strong id="hrsVal">40</strong></label>
+        <input class="range" id="hrs" type="range" min="5" max="120" step="5" value="40">
+      </div>
+      <div class="grid">
+        <div class="kpi"><div>Экономия часов/мес</div><div class="val" id="kpiHours">—</div></div>
+        <div class="kpi"><div>Экономия ₽/мес</div><div class="val" id="kpiRub">—</div></div>
+        <div class="kpi"><div>Окупаемость обучения</div><div class="val" id="kpiRoi">—</div></div>
+        <div class="kpi"><div>Payback период</div><div class="val" id="kpiPayback">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz" class="container">
+    <h2>Мини‑диагностика готовности</h2>
+    <p class="muted">Ответьте на 5 вопросов — получайте персональные рекомендации.</p>
+    <ol class="quiz" id="quizList"></ol>
+    <button class="btn" id="quizBtn">Получить рекомендации</button>
+    <div id="quizResult" style="margin-top:12px"></div>
+  </section>
+
+  <section id="cta" class="container">
+    <div class="cta card">
+      <div>
+        <h2>Готовы начать? Получите программу под ваши задачи</h2>
+        <p class="muted">Мы пришлём черновой учебный план и 3 приоритета внедрения на основе ваших ответов.</p>
+        <ul>
+          <li>Программа на 6–8 недель (форматы: офлайн/онлайн)</li>
+          <li>Политики безопасного использования и контроль качества</li>
+          <li>Наставник по внедрению и метрики эффекта</li>
+        </ul>
+      </div>
+      <form class="form" id="leadForm">
+        <input class="input" required placeholder="Ваше имя" name="name" />
+        <input class="input" required placeholder="Рабочая почта" name="email" type="email" />
+        <input class="input" placeholder="Компания" name="company" />
+        <select class="input" name="industry">
+          <option value="Маркетинг">Маркетинг</option>
+          <option value="Продажи">Продажи</option>
+          <option value="Операции">Операции</option>
+          <option value="HR">HR</option>
+          <option value="Финансы">Финансы</option>
+          <option value="IT">IT</option>
+        </select>
+        <button class="btn" type="submit">Получить программу</button>
+        <div class="hint">Нажимая кнопку, вы соглашаетесь с обработкой данных. Мы не спамим.</div>
+        <div id="leadMsg" class="muted"></div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="container">
+    © <span id="year"></span> Обучение ИИ в компании · <a href="#">Политика</a>
+  </footer>
+
+  <!-- Modal for case details -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <header>
+        <div class="container nav">
+          <div class="logo"><i></i> Кейсы</div>
+          <button class="btn ghost" id="closeModal">Закрыть</button>
+        </div>
+      </header>
+      <div class="content" id="modalContent"></div>
+    </div>
+  </div>
+
+<script>
+// ========= Fun stars background =========
+const cvs = document.getElementById('stars');
+const ctx = cvs.getContext('2d');
+let W,H,stars=[]; function resize(){W=cvs.width=innerWidth;H=cvs.height=innerHeight}
+addEventListener('resize',resize);resize();
+for(let i=0;i<120;i++){stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+0.2,s:Math.random()*0.6+0.2})}
+function loop(){ctx.clearRect(0,0,W,H);for(const s of stars){ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(124,92,255,${0.6*Math.random()})`;ctx.fill();s.x+=s.s; if(s.x>W+5){s.x=-5;s.y=Math.random()*H}} requestAnimationFrame(loop)} loop();
+
+// ========= Data =========
+const CASES = [
+  { id:'mk1', title:'Генерация контента', icon:'📣', dept:'Маркетинг', industry:'E‑commerce', impact:3,
+    desc:'Автогенерация описаний и баннер‑копирайта по брифу и каталогу. Сокращение времени на 60–70%.',
+    steps:['Шаблоны промптов под бренд‑тон','Интеграция с CMS','A/B‑тестирование текста'],
+    metrics:['Время на контент','CTR','Конверсия карточек'] },
+  { id:'mk2', title:'Анализ отзывов', icon:'🧠', dept:'Маркетинг', industry:'Любая', impact:2,
+    desc:'NLP‑кластеризация упоминаний и тональность. Карта болей клиентов для продукта.',
+    steps:['Сбор с источников','Тональность/темы','Дашборд инсайтов'],
+    metrics:['NPS','Время анализа','Доля внедрённых инсайтов'] },
+  { id:'sl1', title:'Помощник продаж', icon:'💬', dept:'Продажи', industry:'B2B', impact:3,
+    desc:'Сводка клиента + авто‑черновик письма по CRM карточке. Экономит до 30 мин на контакт.',
+    steps:['Подключение CRM','Шаблоны ответов','Автологирование'], metrics:['Время на лид','Скорость отклика','Конверсия в встречу'] },
+  { id:'op1', title:'RPA для рутины', icon:'⚙️', dept:'Операции', industry:'Любая', impact:3,
+    desc:'Комбинация LLM + RPA: заполнение форм, сверки, маршрутизация запросов.',
+    steps:['Карта процессов','Пилот на 1–2 сценария','Расширение охвата'], metrics:['Производительность','Ошибки','SLA'] },
+  { id:'hr1', title:'Скрининг резюме', icon:'🧑‍💼', dept:'HR', industry:'Любая', impact:2,
+    desc:'Ранжирование кандидатов по критериям, авто‑шаблоны обратной связи.',
+    steps:['Критерии + политика', 'Шаблоны писем','Обучение рекрутеров'], metrics:['Time‑to‑hire','Качество подбора'] },
+  { id:'it1', title:'Код‑ассистент', icon:'👨‍💻', dept:'IT', industry:'Любая', impact:2,
+    desc:'Генерация тестов, рефакторинг, шаблоны PR. Рост скорости разработки на 20–30%.',
+    steps:['Правила безопасности','Пилот на 1 репо','Метрики качества'], metrics:['Lead time','Дефекты','Покрытие тестами'] },
+  { id:'fn1', title:'Финансовый копилот', icon:'🏦', dept:'Финансы', industry:'Любая', impact:2,
+    desc:'Натуральные запросы к отчётам, сверка платежей, бюджетные прогнозы.',
+    steps:['Подключение DWH','Словарь бизнес‑терминов','Шаблоны запросов'], metrics:['Время отчёта','Точность','Прогноз отклонений'] },
+];
+const FILTERS = ['Все','Маркетинг','Продажи','Операции','HR','Финансы','IT'];
+
+// ========= Build filters & case grid =========
+const filters = document.getElementById('filters');
+FILTERS.forEach((f,i)=>{const b=document.createElement('button');b.className='chip'+(i===0?' active':'');b.textContent=f;b.onclick=()=>{[...filters.children].forEach(c=>c.classList.remove('active'));b.classList.add('active');renderGrid()};filters.appendChild(b)});
+const casesGrid = document.getElementById('casesGrid');
+function renderGrid(){
+  const active = document.querySelector('.chip.active').textContent;
+  casesGrid.innerHTML='';
+  CASES.filter(c=>active==='Все'||c.dept===active).forEach(c=>{
+    const el=document.createElement('div'); el.className='card';
+    el.innerHTML=`<span class="tag">${c.dept}</span>
+      <div class="case">
+        <svg viewBox="0 0 24 24" width="42" height="42" fill="none"><path d="M12 3l8 4v6c0 5-4 8-8 8s-8-3-8-8V7l8-4z" stroke="url(#g)" stroke-width="1.5"/><defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24"><stop stop-color="#7c5cff"/><stop offset="1" stop-color="#00d1ff"/></linearGradient></defs></svg>
+        <div>
+          <h3>${c.icon} ${c.title}</h3>
+          <p>${c.desc}</p>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn" data-id="${c.id}">Подробнее</button>
+            <button class="btn ghost" onclick="addToSimulator('${c.id}')">В симулятор</button>
+          </div>
+        </div>
+      </div>`;
+    el.querySelector('button.btn').onclick=()=>openCase(c);
+    casesGrid.appendChild(el);
+  });
+}
+renderGrid();
+
+// ========= Case modal =========
+const modal=document.getElementById('modal');
+const modalContent=document.getElementById('modalContent');
+function openCase(c){
+  modalContent.innerHTML = `
+    <h2>${c.icon} ${c.title}</h2>
+    <p class="muted">Отдел: ${c.dept} · Отрасль: ${c.industry} · Влияние: ${'⭐'.repeat(c.impact)}</p>
+    <div class="grid cols-3">
+      <div class="card"><strong>Шаги внедрения</strong><ul>${c.steps.map(s=>`<li>• ${s}</li>`).join('')}</ul></div>
+      <div class="card"><strong>Метрики успеха</strong><ul>${c.metrics.map(m=>`<li>• ${m}</li>`).join('')}</ul></div>
+      <div class="card"><strong>Что автоматизируем</strong><p>Сценарии подбираются под ваши данные и процессы. Включены примеры промптов и чек‑листы качества.</p></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px">
+      <button class="btn" onclick="addToSimulator('${c.id}')">Добавить в симулятор</button>
+      <button class="btn ghost" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Обсудить внедрение</button>
+    </div>`;
+  modal.style.display='flex';
+}
+
+document.getElementById('closeModal').onclick=()=>modal.style.display='none';
+modal.addEventListener('click',e=>{if(e.target===modal) modal.style.display='none'});
+
+// ========= Simulator (role + case) =========
+const simEl=document.getElementById('simulator');
+let simState={role:'Менеджер по продукту',industry:'B2B',cases:[]};
+function renderSimulator(){
+  simEl.innerHTML=`
+    <div class="grid">
+      <label>Роль: <input class="input" id="simRole" value="${simState.role}"></label>
+      <label>Отрасль: <input class="input" id="simInd" value="${simState.industry}"></label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${simState.cases.map(cid=>{const c=CASES.find(x=>x.id===cid);return `<span class='chip'>${c.icon} ${c.title}</span>`}).join('')||'<span class="muted">Добавьте кейсы ниже</span>'}</div>
+      <button class="btn" onclick="genPlan()">⚡ Сгенерировать учебный план</button>
+      <div id="simPlan" class="card"></div>
+    </div>`;
+  document.getElementById('simRole').oninput=e=>simState.role=e.target.value;
+  document.getElementById('simInd').oninput=e=>simState.industry=e.target.value;
+}
+function addToSimulator(cid){ if(!simState.cases.includes(cid)) simState.cases.push(cid); renderSimulator(); modal.style.display='none'}
+renderSimulator();
+
+document.getElementById('openDemo').onclick=()=>document.getElementById('cases').scrollIntoView({behavior:'smooth'});
+
+function genPlan(){
+  const picks = simState.cases.map(id=>CASES.find(c=>c.id===id));
+  if(picks.length===0){document.getElementById('simPlan').innerHTML='<span class="muted">Выберите хотя бы один кейс 👇</span>';return}
+  const weeks = [
+    {w:1,t:'Аудит задач и данных',a:['Инвентаризация процессов','Выбор пилотных сценариев','Политики и риски']},
+    {w:2,t:'Обучение и промпт‑инжиниринг',a:['Шаблоны промптов','Best‑practices приватности','Песочница']},
+    {w:3,t:'Пилот 1',a:[]},
+    {w:4,t:'Пилот 2',a:[]},
+    {w:5,t:'Интеграция',a:['Подключение к инструментам','Настройка логирования']},
+    {w:6,t:'Метрики и масштабирование',a:['Сбор обратной связи','План масштабирования']},
+  ];
+  // Вставим активности из выбранных кейсов
+  picks.forEach((c,i)=>{
+    const target = weeks[2 + (i%2)];
+    target.a.push(`${c.icon} ${c.title}`);
+  });
+  const html = `
+    <strong>План на 6 недель для роли «${simState.role}» в отрасли «${simState.industry}»</strong>
+    <div class="grid cols-3" style="margin-top:10px">${weeks.map(w=>`<div class='card'><div class='tag'>Неделя ${w.w}</div><strong>${w.t}</strong><ul>${w.a.map(a=>`<li>• ${a}</li>`).join('')||'<li>—</li>'}</ul></div>`).join('')}</div>
+  `;
+  document.getElementById('simPlan').innerHTML=html;
+}
+
+// ========= ROI Calculator =========
+const nPeople=document.getElementById('nPeople');
+const rate=document.getElementById('rate');
+const save=document.getElementById('save');
+const hrs=document.getElementById('hrs');
+const kpiHours=document.getElementById('kpiHours');
+const kpiRub=document.getElementById('kpiRub');
+const kpiRoi=document.getElementById('kpiRoi');
+const kpiPayback=document.getElementById('kpiPayback');
+
+function fmt(x){return x.toLocaleString('ru-RU')}
+function upd(){
+  document.getElementById('nPeopleVal').textContent=nPeople.value;
+  document.getElementById('rateVal').textContent=fmt(+rate.value);
+  document.getElementById('saveVal').textContent=save.value+'%';
+  document.getElementById('hrsVal').textContent=hrs.value;
+  const totalHours = +nPeople.value * +hrs.value * (+save.value/100);
+  const totalRub = totalHours * +rate.value;
+  kpiHours.textContent = fmt(Math.round(totalHours));
+  kpiRub.textContent = fmt(Math.round(totalRub))+ ' ₽';
+  const trainingCost = 450000; // условная стоимость программы
+  const roi = (totalRub-trainingCost)/trainingCost;
+  kpiRoi.textContent = (roi>0?'+':'') + Math.round(roi*100) + '%';
+  const paybackMonths = Math.max(1, Math.ceil(trainingCost/Math.max(1,totalRub)));
+  kpiPayback.textContent = paybackMonths + ' мес.';
+}
+[nPeople,rate,save,hrs].forEach(inp=>inp.oninput=upd); upd();
+
+// ========= Readiness quiz =========
+const QUESTIONS=[
+  {q:'Есть ли ответственность за качество ИИ‑результатов?',a:['Да','Частично','Нет'],score:[2,1,0]},
+  {q:'Сформированы правила приватности/безопасности?',a:['Да','В процессе','Нет'],score:[2,1,0]},
+  {q:'Есть процессы с повторяющимися задачами?',a:['Много','Немного','Почти нет'],score:[2,1,0]},
+  {q:'Готовность данных (доступ/структура)?',a:['Готовы','Частично','Не готовы'],score:[2,1,0]},
+  {q:'Выделены 5–10 часов на обучение в неделю?',a:['Да','Может быть','Нет'],score:[2,1,0]},
+];
+const quizList=document.getElementById('quizList');
+QUESTIONS.forEach((it,i)=>{
+  const li=document.createElement('li');
+  li.innerHTML=`<div>${i+1}. ${it.q}</div><div>${it.a.map((t,j)=>`<label><input type='radio' name='q${i}' value='${j}'> ${t}</label>`).join(' ')}</div>`;
+  quizList.appendChild(li);
+});
+
+const quizBtn=document.getElementById('quizBtn');
+quizBtn.onclick=()=>{
+  let score=0, answered=0; 
+  QUESTIONS.forEach((it,i)=>{const v=document.querySelector(`input[name=q${i}]:checked`); if(v){answered++; score+=it.score[+v.value]}});
+  if(answered<QUESTIONS.length){alert('Пожалуйста, ответьте на все вопросы'); return}
+  let msg='', color='';
+  if(score>=8){msg='Высокая готовность: начните с 2–3 пилотов и измеримых метрик.'; color='var(--success)'}
+  else if(score>=5){msg='Средняя готовность: уделите внимание политике и данным, начните с одного пилота.'; color='var(--warn)'}
+  else {msg='Низкая готовность: начинаем с политики, аудита процессов и обучения команды.'; color='#ff6b6b'}
+  document.getElementById('quizResult').innerHTML=`<div class='card'><strong>Ваш балл: ${score}/10</strong><div style='color:${color}'>${msg}</div></div>`
+}
+
+// ========= Lead form (no backend) =========
+const leadForm=document.getElementById('leadForm');
+leadForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const fd=new FormData(leadForm); const data=Object.fromEntries(fd.entries());
+  const summary = `Спасибо, ${data.name}! Мы подготовим программу для «${data.company||'вашей компании'}» (${data.industry}) и пришлём на ${data.email}.`;
+  document.getElementById('leadMsg').textContent=summary;
+  // Сохраним локально для демонстрации
+  localStorage.setItem('ai-training-lead', JSON.stringify({...data, ts:Date.now()}));
+  leadForm.reset();
+});
+
+// ========= Misc =========
+ document.getElementById('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
